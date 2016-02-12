@@ -64,7 +64,7 @@ public final class Capture<T> {
 	 */
 	public void startCapture() {
 		this.currentState = State.CAPTURING; 
-		this.captureStart = System.currentTimeMillis();
+		this.captureStart = System.nanoTime();
 	}
 
 	/**
@@ -93,7 +93,7 @@ public final class Capture<T> {
 		if (this.currentState != State.CAPTURING) {
 			throw new IllegalStateException("Object is not in capture mode.");
 		}
-		final long relTimestamp = System.currentTimeMillis() - this.captureStart;
+		final long relTimestamp = System.nanoTime() - this.captureStart;
 		this.serializedEvents.add(new Wrapper(event, relTimestamp));
 	}
 
