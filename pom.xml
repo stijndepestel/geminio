@@ -7,11 +7,11 @@
         <version>0.11-SNAPSHOT</version>
     </parent>
     <groupId>com.stijndepestel</groupId>
-    <artifactId>thesis</artifactId>
+    <artifactId>thesis-moit</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Thesis project</name> 
-
+    <name>MOIT</name>
+    <description>Mock framework for connected devices, a.o. capture/replay functionality. Part of thesis project.</description>
     <developers>
         <developer>
             <id>sjdpeste</id>
