@@ -73,6 +73,26 @@ public final class Replay<T> {
         this.loader = loader;
         this.eventCatcher = eventCatcher;
         this.queue = new PriorityQueue<>();
+        this.currentState = State.CREATED;
+    }
+
+    /**
+     * Load the events.
+     *
+     * @return Reference to this instance.
+     */
+    public Replay<T> load() {
+        if (this.currentState != State.CREATED) {
+            throw new IllegalArgumentException(
+                    "Object is not in correct state to start the replay.");
+        }
+        // Get the json
+        final JSONArray jsonarr = this.loader.get().getJSONArray(
+                JSONNames.JSON_EVENTS);
+        jsonarr.forEach(json -> this.queue.add(new Wrapper<>((JSONObject) json,
+                this.deserializer)));
+        this.currentState = State.LOADED;
+        return this;
     }
 
     /**
@@ -80,16 +100,11 @@ public final class Replay<T> {
      * replaying them.
      */
     public void startReplay() {
-        if (this.currentState != State.CREATED) {
+        if (this.currentState != State.LOADED) {
             throw new IllegalArgumentException(
                     "Object is not in correct state to start the replay.");
         }
         this.currentState = State.REPLAYING;
-        // Get the json
-        final JSONArray jsonarr = this.loader.get().getJSONArray(
-                JSONNames.JSON_EVENTS);
-        jsonarr.forEach(json -> this.queue.add(new Wrapper<>((JSONObject) json,
-                this.deserializer)));
         this.replayStart = System.currentTimeMillis();
         // start replay
         this.replay();
@@ -137,6 +152,10 @@ public final class Replay<T> {
          * The object has been created but has not yet started the replay.
          */
         CREATED,
+        /**
+         * The object has loaded the events for replaying.
+         */
+        LOADED,
         /**
          * The object is in replay mode, it is throwing.
          */
