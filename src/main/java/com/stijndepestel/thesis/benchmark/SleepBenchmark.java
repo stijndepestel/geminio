@@ -2,10 +2,15 @@ package com.stijndepestel.thesis.benchmark;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Benchmark to check the error range of the Thread.sleep() method.
+ * 
+ * @author sjdpeste
+ *
+ */
 public class SleepBenchmark {
 
 	/**
@@ -28,6 +33,11 @@ public class SleepBenchmark {
 	 */
 	private static final Map<Double, Integer> DISTRIBUTION = new TreeMap<>();
 
+	/**
+	 * Execute the benchmark.
+	 * @param args Ignored.
+	 * @throws InterruptedException On Thread.sleep() problem.
+	 */
 	public static void main(String... args) throws InterruptedException {
 		for (int i = 0; i < NUMBER_OF_LOOPS; i++) {
 			long before = System.nanoTime();
@@ -44,25 +54,26 @@ public class SleepBenchmark {
 				DISTRIBUTION.put(result, 1);
 			}
 		}
-//		System.out.println(Arrays.toString(RAW_RESULTS));
+		// System.out.println(Arrays.toString(RAW_RESULTS));
 		System.out.println(DISTRIBUTION);
 	}
 
 	/**
-	 * Copied from
-	 * http://stackoverflow.com/questions/2808535/round-a-double-to-2
-	 * -decimal-places
+	 * Round the double value to a certain number of decimals.
 	 * 
 	 * @param value
-	 * @param places
-	 * @return
+	 *            The value to round.
+	 * @param decimals
+	 *            The number of decimal places to round to.
+	 * @return The rounded value.
 	 */
-	public static double round(double value, int places) {
-		if (places < 0)
-			throw new IllegalArgumentException();
-
+	public static double round(double value, int decimals) {
+		if (decimals < 0) {
+			throw new IllegalArgumentException(
+					"Number of decimal places should be bigger than 0.");
+		}
 		BigDecimal bd = new BigDecimal(value);
-		bd = bd.setScale(places, RoundingMode.HALF_UP);
+		bd = bd.setScale(decimals, RoundingMode.HALF_UP);
 		return bd.doubleValue();
 	}
 
