@@ -95,6 +95,9 @@ public final class Replay<T> {
         this.replay();
     }
 
+    /**
+     * Recursive replay function.
+     */
     private void replay() {
         if (this.currentState != State.REPLAYING) {
             throw new IllegalArgumentException(
