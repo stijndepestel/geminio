@@ -70,7 +70,7 @@ public final class Capture<T> {
                     "Object is not in correct state to start the capture.");
         }
         this.currentState = State.CAPTURING;
-        this.captureStart = System.nanoTime();
+        this.captureStart = System.currentTimeMillis();
     }
 
     /**
@@ -99,7 +99,8 @@ public final class Capture<T> {
         if (this.currentState != State.CAPTURING) {
             throw new IllegalStateException("Object is not in capture mode.");
         }
-        final long relTimestamp = System.nanoTime() - this.captureStart;
+        final long relTimestamp = System.currentTimeMillis()
+                - this.captureStart;
         this.serializedEvents.add(new Wrapper<T>(event, relTimestamp));
     }
 
