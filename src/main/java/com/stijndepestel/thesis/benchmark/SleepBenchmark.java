@@ -3,7 +3,9 @@ package com.stijndepestel.thesis.benchmark;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.slf4j.LoggerFactory;
 
 /**
  * Benchmark to check the error range of the Thread.sleep() method.
@@ -24,6 +26,16 @@ public class SleepBenchmark {
 	private static final int NUMBER_OF_LOOPS = 10000;
 
 	/**
+	 * Number to use for calculating the conversion from nano to milli.
+	 */
+	private static final double CONVERSION_CALC = 1000000D;
+
+	/**
+	 * The number of decimals to round to.
+	 */
+	private static final int ROUND = 2;
+
+	/**
 	 * Array to store the raw results.
 	 */
 	private static final double[] RAW_RESULTS = new double[NUMBER_OF_LOOPS];
@@ -31,22 +43,33 @@ public class SleepBenchmark {
 	/**
 	 * Distribution of the results.
 	 */
-	private static final Map<Double, Integer> DISTRIBUTION = new TreeMap<>();
+	private final Map<Double, Integer> DISTRIBUTION;
+
+	/**
+	 * Default constructor.
+	 */
+	private SleepBenchmark() {
+		DISTRIBUTION = new ConcurrentHashMap<>();
+	}
 
 	/**
 	 * Execute the benchmark.
-	 * @param args Ignored.
-	 * @throws InterruptedException On Thread.sleep() problem.
+	 * 
 	 */
-	public static void main(String... args) throws InterruptedException {
+	public void execute() {
 		for (int i = 0; i < NUMBER_OF_LOOPS; i++) {
-			long before = System.nanoTime();
-			Thread.sleep(SLEEP_INTERVAL);
+			final long before = System.nanoTime();
+			try {
+				Thread.sleep(SLEEP_INTERVAL);
+			} catch (InterruptedException e) {
+				// Ignore interrupted exception.
+			}
 			// SLEEP_INTERVAl is in ms and all other in nanoseconds.
 			// Store result in ms rounded at two decimals.
-			double result = round(
-					((double) (System.nanoTime() - before) - (SLEEP_INTERVAL * 1000000)) / 1000000D,
-					2);
+			final double result = round(
+					((double) (System.nanoTime() - before) - (SleepBenchmark.SLEEP_INTERVAL * SleepBenchmark.CONVERSION_CALC))
+							/ SleepBenchmark.CONVERSION_CALC,
+					SleepBenchmark.ROUND);
 			RAW_RESULTS[i] = result;
 			if (DISTRIBUTION.containsKey(result)) {
 				DISTRIBUTION.put(result, DISTRIBUTION.get(result) + 1);
@@ -54,8 +77,9 @@ public class SleepBenchmark {
 				DISTRIBUTION.put(result, 1);
 			}
 		}
+		// If all results should be written to STD OUT use:
 		// System.out.println(Arrays.toString(RAW_RESULTS));
-		System.out.println(DISTRIBUTION);
+		LoggerFactory.getLogger(SleepBenchmark.class).info("{}", DISTRIBUTION);
 	}
 
 	/**
@@ -67,14 +91,24 @@ public class SleepBenchmark {
 	 *            The number of decimal places to round to.
 	 * @return The rounded value.
 	 */
-	public static double round(double value, int decimals) {
+	public double round(double value, int decimals) {
 		if (decimals < 0) {
 			throw new IllegalArgumentException(
 					"Number of decimal places should be bigger than 0.");
 		}
-		BigDecimal bd = new BigDecimal(value);
+		BigDecimal bd = BigDecimal.valueOf(value);
 		bd = bd.setScale(decimals, RoundingMode.HALF_UP);
 		return bd.doubleValue();
+	}
+
+	/**
+	 * Execute the benchmark.
+	 * 
+	 * @param args
+	 *            Ignored.
+	 */
+	public static void main(String... args) {
+		new SleepBenchmark().execute();
 	}
 
 }
