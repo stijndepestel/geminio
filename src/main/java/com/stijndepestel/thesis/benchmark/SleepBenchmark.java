@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Benchmark to check the error range of the Thread.sleep() method.
- * 
+ *
  * @author sjdpeste
  *
  */
@@ -50,25 +50,26 @@ public final class SleepBenchmark {
      */
     private SleepBenchmark() {
         this.distribution = new ConcurrentHashMap<>();
-        this.rawResults = new double[NUMBER_OF_LOOPS];
+        this.rawResults = new double[SleepBenchmark.NUMBER_OF_LOOPS];
     }
 
     /**
      * Execute the benchmark.
-     * 
+     *
      */
     public void execute() {
-        for (int i = 0; i < NUMBER_OF_LOOPS; i++) {
+        for (int i = 0; i < SleepBenchmark.NUMBER_OF_LOOPS; i++) {
             final long before = System.nanoTime();
             try {
-                Thread.sleep(SLEEP_INTERVAL);
-            } catch (InterruptedException e) {
+                Thread.sleep(SleepBenchmark.SLEEP_INTERVAL);
+            } catch (final InterruptedException e) {
                 // Ignore interrupted exception.
             }
             // SLEEP_INTERVAl is in ms and all other in nanoseconds.
             // Store result in ms rounded at two decimals.
-            final double result = round(
-                    ((double) (System.nanoTime() - before) - (SleepBenchmark.SLEEP_INTERVAL * SleepBenchmark.CONVERSION_CALC))
+            final double result = this.round(
+                    (System.nanoTime() - before - SleepBenchmark.SLEEP_INTERVAL
+                            * SleepBenchmark.CONVERSION_CALC)
                             / SleepBenchmark.CONVERSION_CALC,
                     SleepBenchmark.ROUND_DECIMALS);
             this.rawResults[i] = result;
@@ -78,23 +79,22 @@ public final class SleepBenchmark {
             } else {
                 this.distribution.put(result, 1);
             }
-        } 
-        // If all results should be written to STD OUT use:
-        // System.out.println(Arrays.toString(RAW_RESULTS));
+        }
+        // Outpur the distribution to the logger.
         LoggerFactory.getLogger(SleepBenchmark.class).info("{}",
                 this.distribution);
     }
 
     /**
      * Round the double value to a certain number of decimals.
-     * 
+     *
      * @param value
      *            The value to round.
      * @param decimals
      *            The number of decimal places to round to.
      * @return The rounded value.
      */
-    public double round(double value, int decimals) {
+    public double round(final double value, final int decimals) {
         if (decimals < 0) {
             throw new IllegalArgumentException(
                     "Number of decimal places should be bigger than 0.");
@@ -106,11 +106,11 @@ public final class SleepBenchmark {
 
     /**
      * Execute the benchmark.
-     * 
+     *
      * @param args
      *            Ignored.
      */
-    public static void main(String... args) {
+    public static void main(final String... args) {
         new SleepBenchmark().execute();
     }
 
