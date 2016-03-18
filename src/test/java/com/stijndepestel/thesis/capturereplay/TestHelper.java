@@ -2,6 +2,12 @@ package com.stijndepestel.thesis.capturereplay;
 
 import org.json.JSONObject;
 
+/**
+ * Serializer and deserializer for the TestEvent.
+ * 
+ * @author sjdpeste
+ *
+ */
 public final class TestHelper {
 
     private static final String JSON_NAME_TIME = "time";

@@ -13,102 +13,105 @@ import org.slf4j.LoggerFactory;
  * @author sjdpeste
  *
  */
-public class SleepBenchmark {
+public final class SleepBenchmark {
 
-	/**
-	 * The sleep interval in ms.
-	 */
-	private static final long SLEEP_INTERVAL = 100;
+    /**
+     * The sleep interval in ms.
+     */
+    private static final long SLEEP_INTERVAL = 100;
 
-	/**
-	 * Number of times to run the loop.
-	 */
-	private static final int NUMBER_OF_LOOPS = 10000;
+    /**
+     * Number of times to run the loop.
+     */
+    private static final int NUMBER_OF_LOOPS = 10000;
 
-	/**
-	 * Number to use for calculating the conversion from nano to milli.
-	 */
-	private static final double CONVERSION_CALC = 1000000D;
+    /**
+     * Number to use for calculating the conversion from nano to milli.
+     */
+    private static final double CONVERSION_CALC = 1000000D;
 
-	/**
-	 * The number of decimals to round to.
-	 */
-	private static final int ROUND = 2;
+    /**
+     * The number of decimals to round to.
+     */
+    private static final int ROUND_DECIMALS = 2;
 
-	/**
-	 * Array to store the raw results.
-	 */
-	private static final double[] RAW_RESULTS = new double[NUMBER_OF_LOOPS];
+    /**
+     * Array to store the raw results.
+     */
+    private final double[] rawResults;
 
-	/**
-	 * Distribution of the results.
-	 */
-	private final Map<Double, Integer> DISTRIBUTION;
+    /**
+     * Distribution of the results.
+     */
+    private final Map<Double, Integer> distribution;
 
-	/**
-	 * Default constructor.
-	 */
-	private SleepBenchmark() {
-		DISTRIBUTION = new ConcurrentHashMap<>();
-	}
+    /**
+     * Default constructor.
+     */
+    private SleepBenchmark() {
+        this.distribution = new ConcurrentHashMap<>();
+        this.rawResults = new double[NUMBER_OF_LOOPS];
+    }
 
-	/**
-	 * Execute the benchmark.
-	 * 
-	 */
-	public void execute() {
-		for (int i = 0; i < NUMBER_OF_LOOPS; i++) {
-			final long before = System.nanoTime();
-			try {
-				Thread.sleep(SLEEP_INTERVAL);
-			} catch (InterruptedException e) {
-				// Ignore interrupted exception.
-			}
-			// SLEEP_INTERVAl is in ms and all other in nanoseconds.
-			// Store result in ms rounded at two decimals.
-			final double result = round(
-					((double) (System.nanoTime() - before) - (SleepBenchmark.SLEEP_INTERVAL * SleepBenchmark.CONVERSION_CALC))
-							/ SleepBenchmark.CONVERSION_CALC,
-					SleepBenchmark.ROUND);
-			RAW_RESULTS[i] = result;
-			if (DISTRIBUTION.containsKey(result)) {
-				DISTRIBUTION.put(result, DISTRIBUTION.get(result) + 1);
-			} else {
-				DISTRIBUTION.put(result, 1);
-			}
-		}
-		// If all results should be written to STD OUT use:
-		// System.out.println(Arrays.toString(RAW_RESULTS));
-		LoggerFactory.getLogger(SleepBenchmark.class).info("{}", DISTRIBUTION);
-	}
+    /**
+     * Execute the benchmark.
+     * 
+     */
+    public void execute() {
+        for (int i = 0; i < NUMBER_OF_LOOPS; i++) {
+            final long before = System.nanoTime();
+            try {
+                Thread.sleep(SLEEP_INTERVAL);
+            } catch (InterruptedException e) {
+                // Ignore interrupted exception.
+            }
+            // SLEEP_INTERVAl is in ms and all other in nanoseconds.
+            // Store result in ms rounded at two decimals.
+            final double result = round(
+                    ((double) (System.nanoTime() - before) - (SleepBenchmark.SLEEP_INTERVAL * SleepBenchmark.CONVERSION_CALC))
+                            / SleepBenchmark.CONVERSION_CALC,
+                    SleepBenchmark.ROUND_DECIMALS);
+            this.rawResults[i] = result;
+            if (this.distribution.containsKey(result)) {
+                this.distribution
+                        .put(result, this.distribution.get(result) + 1);
+            } else {
+                this.distribution.put(result, 1);
+            }
+        } 
+        // If all results should be written to STD OUT use:
+        // System.out.println(Arrays.toString(RAW_RESULTS));
+        LoggerFactory.getLogger(SleepBenchmark.class).info("{}",
+                this.distribution);
+    }
 
-	/**
-	 * Round the double value to a certain number of decimals.
-	 * 
-	 * @param value
-	 *            The value to round.
-	 * @param decimals
-	 *            The number of decimal places to round to.
-	 * @return The rounded value.
-	 */
-	public double round(double value, int decimals) {
-		if (decimals < 0) {
-			throw new IllegalArgumentException(
-					"Number of decimal places should be bigger than 0.");
-		}
-		BigDecimal bd = BigDecimal.valueOf(value);
-		bd = bd.setScale(decimals, RoundingMode.HALF_UP);
-		return bd.doubleValue();
-	}
+    /**
+     * Round the double value to a certain number of decimals.
+     * 
+     * @param value
+     *            The value to round.
+     * @param decimals
+     *            The number of decimal places to round to.
+     * @return The rounded value.
+     */
+    public double round(double value, int decimals) {
+        if (decimals < 0) {
+            throw new IllegalArgumentException(
+                    "Number of decimal places should be bigger than 0.");
+        }
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(decimals, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
 
-	/**
-	 * Execute the benchmark.
-	 * 
-	 * @param args
-	 *            Ignored.
-	 */
-	public static void main(String... args) {
-		new SleepBenchmark().execute();
-	}
+    /**
+     * Execute the benchmark.
+     * 
+     * @param args
+     *            Ignored.
+     */
+    public static void main(String... args) {
+        new SleepBenchmark().execute();
+    }
 
 }

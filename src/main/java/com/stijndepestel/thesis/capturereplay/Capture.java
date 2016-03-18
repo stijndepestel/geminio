@@ -66,7 +66,7 @@ public final class Capture<T> {
      */
     public void startCapture() {
         if (this.currentState != State.CREATED) {
-            throw new IllegalArgumentException(
+            throw new IllegalStateException(
                     "Object is not in correct state to start the capture.");
         }
         this.currentState = State.CAPTURING;
@@ -123,6 +123,21 @@ public final class Capture<T> {
      */
     public int getNumberOfCapturedEvents() {
         return this.serializedEvents.size();
+    }
+
+    /**
+     * Get the time (in milliseconds) that the capture has been running.
+     * 
+     * @return The current running time that the capture has been running in
+     *         milliseconds.
+     * @throws IllegalArgumentException
+     *             When the object is not in capture mode.
+     */
+    public long getCurrentCaptureTime() {
+        if (currentState != State.CAPTURING) {
+            throw new IllegalArgumentException("Object is not in capture mode.");
+        }
+        return System.currentTimeMillis() - captureStart;
     }
 
     /**
