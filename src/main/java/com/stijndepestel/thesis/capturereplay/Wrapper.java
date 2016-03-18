@@ -95,7 +95,7 @@ public final class Wrapper<T> implements Comparable<Wrapper<T>> {
 
     @Override
     public boolean equals(final Object obj) {
-        if (obj.getClass() == this.getClass()) {
+        if (obj != null && obj.getClass() == this.getClass()) {
             final Wrapper<?> wrapper = (Wrapper<?>) obj;
             return this.relativeTimestamp == wrapper.relativeTimestamp
                     && this.event.equals(wrapper.event);
@@ -105,6 +105,6 @@ public final class Wrapper<T> implements Comparable<Wrapper<T>> {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return 13 * (int) this.relativeTimestamp + 17 * this.event.hashCode();
     }
 }
