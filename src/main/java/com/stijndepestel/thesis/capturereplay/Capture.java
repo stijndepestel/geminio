@@ -18,6 +18,11 @@ import org.json.JSONObject;
 public final class Capture<T> {
 
     /**
+     * The error message for the IllegalStateExceptions thrown in this object.
+     */
+    private static final String ERROR_MESSAGE = "Object is not in the right state.";
+
+    /**
      * List containing the serialized events that are not yet persisted.
      */
     private final List<Wrapper<T>> serializedEvents;
@@ -66,8 +71,7 @@ public final class Capture<T> {
      */
     public void startCapture() {
         if (this.currentState != State.CREATED) {
-            throw new IllegalStateException(
-                    "Object is not in correct state to start the capture.");
+            throw new IllegalStateException(ERROR_MESSAGE);
         }
         this.currentState = State.CAPTURING;
         this.captureStart = System.currentTimeMillis();
@@ -81,7 +85,7 @@ public final class Capture<T> {
      */
     public void stopCapture() {
         if (this.currentState != State.CAPTURING) {
-            throw new IllegalStateException("Object is not in capture mode.");
+            throw new IllegalStateException(ERROR_MESSAGE);
         }
         this.currentState = State.STOPPED;
     }
@@ -97,7 +101,7 @@ public final class Capture<T> {
      */
     public void capture(final T event) {
         if (this.currentState != State.CAPTURING) {
-            throw new IllegalStateException("Object is not in capture mode.");
+            throw new IllegalStateException(ERROR_MESSAGE);
         }
         final long relTimestamp = System.currentTimeMillis()
                 - this.captureStart;
@@ -110,8 +114,7 @@ public final class Capture<T> {
      */
     public void saveEvents() {
         if (this.currentState != State.STOPPED) {
-            throw new IllegalStateException(
-                    "Has the object stopped the capture?");
+            throw new IllegalStateException(ERROR_MESSAGE);
         }
         this.persister.accept(this.eventsToJSON());
     }
@@ -134,10 +137,10 @@ public final class Capture<T> {
      *             When the object is not in capture mode.
      */
     public long getCurrentCaptureTime() {
-        if (currentState != State.CAPTURING) {
-            throw new IllegalArgumentException("Object is not in capture mode.");
+        if (this.currentState != State.CAPTURING) {
+            throw new IllegalArgumentException(ERROR_MESSAGE);
         }
-        return System.currentTimeMillis() - captureStart;
+        return System.currentTimeMillis() - this.captureStart;
     }
 
     /**

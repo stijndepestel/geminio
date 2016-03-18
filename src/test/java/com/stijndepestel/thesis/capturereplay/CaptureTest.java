@@ -103,10 +103,16 @@ public class CaptureTest {
     @Test
     public void persisterGetsJSONOfAllEvents() {
         final int numberOfEventsToGenerate = 5;
-        this.capture = new Capture<>(TestHelper::serialize, x -> {
-            JSONArray jsonArray = x.getJSONArray(JSONNames.JSON_EVENTS);
-            Assert.assertEquals(numberOfEventsToGenerate, jsonArray.length());
-        });
+        this.capture = new Capture<>(
+                TestHelper::serialize,
+                x -> {
+                    System.out.println(x.toString());
+                    final JSONArray jsonArray = x
+                            .getJSONArray(JSONNames.JSON_EVENTS);
+                    Assert.assertEquals(
+                            "Same number of events should be stored as the number of events that were thrown.",
+                            numberOfEventsToGenerate, jsonArray.length());
+                });
         this.capture.startCapture();
         for (int i = 0; i < numberOfEventsToGenerate; i++) {
             this.capture.capture(new TestEvent());

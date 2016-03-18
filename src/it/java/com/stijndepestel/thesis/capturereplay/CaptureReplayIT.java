@@ -2,7 +2,7 @@ package com.stijndepestel.thesis.capturereplay;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.json.JSONObject;
@@ -57,7 +57,7 @@ public final class CaptureReplayIT {
         final ArrayList<TestEvent> catchedEvents = new ArrayList<>(
                 CaptureReplayIT.NUMBER_OF_EVENTS_TO_THROW);
         // Function that serves as an event catcher.
-        final Function<TestEvent, Void> eventCatcher = event -> {
+        final Consumer<TestEvent> eventCatcher = event -> {
             // Deviation of intended time.
             final long deviation = System.currentTimeMillis()
                     - this.previousTimestamp
@@ -69,7 +69,6 @@ public final class CaptureReplayIT {
             catchedEvents.add(event);
             // Set the previous time stamp for the next iteration.
             this.previousTimestamp = System.currentTimeMillis();
-            return null;
         };
         // The capture object to use during the test.
         final Capture<TestEvent> capture = new Capture<>(TestHelper::serialize,
