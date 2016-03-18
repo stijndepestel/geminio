@@ -45,7 +45,7 @@ public final class Capture<T> {
     /**
      * Consumer to persist the captured events.
      *
-     * @see FilePersister
+     * @see Persister
      */
     private final Consumer<JSONObject> persister;
 

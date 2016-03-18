@@ -37,7 +37,7 @@ public final class Replay<T> {
     /**
      * Supplier of the JSONObject. Can f.e. be loaded from file.
      *
-     * @see FilePersister
+     * @see Persister
      */
     private final Supplier<JSONObject> loader;
 
