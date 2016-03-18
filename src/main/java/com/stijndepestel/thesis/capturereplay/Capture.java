@@ -71,7 +71,7 @@ public final class Capture<T> {
      */
     public void startCapture() {
         if (this.currentState != State.CREATED) {
-            throw new IllegalStateException(ERROR_MESSAGE);
+            throw new IllegalStateException(Capture.ERROR_MESSAGE);
         }
         this.currentState = State.CAPTURING;
         this.captureStart = System.currentTimeMillis();
@@ -85,7 +85,7 @@ public final class Capture<T> {
      */
     public void stopCapture() {
         if (this.currentState != State.CAPTURING) {
-            throw new IllegalStateException(ERROR_MESSAGE);
+            throw new IllegalStateException(Capture.ERROR_MESSAGE);
         }
         this.currentState = State.STOPPED;
     }
@@ -101,7 +101,7 @@ public final class Capture<T> {
      */
     public void capture(final T event) {
         if (this.currentState != State.CAPTURING) {
-            throw new IllegalStateException(ERROR_MESSAGE);
+            throw new IllegalStateException(Capture.ERROR_MESSAGE);
         }
         final long relTimestamp = System.currentTimeMillis()
                 - this.captureStart;
@@ -114,7 +114,7 @@ public final class Capture<T> {
      */
     public void saveEvents() {
         if (this.currentState != State.STOPPED) {
-            throw new IllegalStateException(ERROR_MESSAGE);
+            throw new IllegalStateException(Capture.ERROR_MESSAGE);
         }
         this.persister.accept(this.eventsToJSON());
     }
@@ -126,21 +126,6 @@ public final class Capture<T> {
      */
     public int getNumberOfCapturedEvents() {
         return this.serializedEvents.size();
-    }
-
-    /**
-     * Get the time (in milliseconds) that the capture has been running.
-     * 
-     * @return The current running time that the capture has been running in
-     *         milliseconds.
-     * @throws IllegalArgumentException
-     *             When the object is not in capture mode.
-     */
-    public long getCurrentCaptureTime() {
-        if (this.currentState != State.CAPTURING) {
-            throw new IllegalArgumentException(ERROR_MESSAGE);
-        }
-        return System.currentTimeMillis() - this.captureStart;
     }
 
     /**
