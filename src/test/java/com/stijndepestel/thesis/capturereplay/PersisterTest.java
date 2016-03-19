@@ -2,6 +2,7 @@ package com.stijndepestel.thesis.capturereplay;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -17,17 +18,23 @@ public class PersisterTest {
 
     /**
      * Test for illegal state if no output stream is available.
+     *
+     * @throws IOException
+     *             When an IO error occurs during persisting.
      */
     @Test(expected = IllegalStateException.class)
-    public void exceptionNoOutputStreamTest() {
+    public void exceptionNoOutputStreamTest() throws IOException {
         new Persister(System.in).persist(new JSONObject());
     }
 
     /**
      * Test if a JSONObject is provided to the output stream as it should be.
+     *
+     * @throws IOException
+     *             when an IO error occurs during persisting.
      */
     @Test
-    public void persistTest() {
+    public void persistTest() throws IOException {
         final String json = "{\"ping\":\"pong\"}";
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         new Persister(outputStream).persist(new JSONObject(json));

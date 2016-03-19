@@ -9,8 +9,6 @@ import java.util.Optional;
 import java.util.Scanner;
 
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Provides functionality for persisting a JSON object.
@@ -19,12 +17,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public final class Persister {
-
-    /**
-     * Logger for the class.
-     */
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(Persister.class);
 
     /**
      * The output stream to write the JSON to.
@@ -81,8 +73,10 @@ public final class Persister {
      *
      * @param json
      *            The json to persist.
+     * @throws IOException
+     *             When an IO error occurs during persisting.
      */
-    public void persist(final JSONObject json) {
+    public void persist(final JSONObject json) throws IOException {
         if (!this.outputStream.isPresent()) {
             throw new IllegalStateException("Output stream not present.");
         }
@@ -90,10 +84,6 @@ public final class Persister {
                 new OutputStreamWriter(this.outputStream.get(), "UTF8"))) {
             writer.append(json.toString());
             writer.flush();
-        } catch (final IOException exception) {
-            Persister.LOGGER.error(
-                    "Something went wrong when trying to persist the json.",
-                    exception);
         }
     }
 
