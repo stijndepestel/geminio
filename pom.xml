@@ -18,27 +18,15 @@
             </roles>
         </developer>
     </developers>
-    
-    <properties>
-        <project.build.sourceEncoding>UTF-8
-        </project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8
-        </project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.min-version>3.0.2</maven.min-version>        
-    <!-- The destination file for the code coverage report has to be set to the same value
-         in the parent pom and in each module pom. Then JaCoCo will add up information in
-         the same report, so that, it will give the cross-module code coverage. -->
-    <sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
-    <!-- The destination file for the code coverage report has to be set to the same value
-         in the parent pom and in each module pom. Then JaCoCo will add up information in
-         the same report, so that, it will give the cross-module code coverage. -->
-    <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
-    </properties>
     <prerequisites>
         <maven>3.0.2</maven>
     </prerequisites>
+    <scm>
+        <connection>scm:git:sh://dyamand.test:7999/ts/thesis-framework.git
+        </connection>
+        <developerConnection>scm:git:ssh://dyamand.test:7999/ts/thesis-framework.git
+        </developerConnection>
+    </scm>
     <ciManagement>
         <system>jenkins</system>
         <url>http://dyamand.intec.ugent.be:8080/job/DYAMAND_1/</url>
@@ -58,16 +46,29 @@
         </snapshotRepository>
         <site>
             <id>dyamand-site</id>
-            <url>scp://dyamand.intec.ugent.be:/work/maven-deploy/dyamand-${project.version}/
+            <url>scp://dyamand.intec.ugent.be:/work/maven-deploy/thesis-framework-${project.version}/
             </url>
         </site>
     </distributionManagement>
-    <scm>
-        <connection>scm:git:sh://dyamand.test:7999/dyamand/dyamand-core.git
-        </connection>
-        <developerConnection>scm:git:ssh://dyamand.test:7999/dyamand/dyamand-core.git
-        </developerConnection>
-    </scm>
+    <properties>
+        <project.build.sourceEncoding>UTF-8
+        </project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8
+        </project.reporting.outputEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.min-version>3.0.2</maven.min-version>
+        <!-- The destination file for the code coverage report has to be 
+            set to the same value in the parent pom and in each module pom. Then JaCoCo 
+            will add up information in the same report, so that, it will give the cross-module 
+            code coverage. -->
+        <sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
+        <!-- The destination file for the code coverage report has to be 
+            set to the same value in the parent pom and in each module pom. Then JaCoCo 
+            will add up information in the same report, so that, it will give the cross-module 
+            code coverage. -->
+        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.json</groupId>
@@ -122,6 +123,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
         <extensions>
             <extension>
@@ -168,11 +170,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <dependencies>
-                    <dependency>
-                        <groupId>org.dyamand</groupId>
-                        <artifactId>dyamand-config</artifactId>
-                        <version>0.10.3</version>
-                    </dependency>
                     <dependency>
                         <groupId>lt.velykis.maven.skins</groupId>
                         <artifactId>reflow-velocity-tools</artifactId>
@@ -430,8 +427,8 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.10.3</version>
-        </plugin>
+                    <version>2.10.3</version>
+                </plugin>
                 <plugin>
                     <groupId>external.atlassian.jgitflow</groupId>
                     <artifactId>jgitflow-maven-plugin</artifactId>
@@ -471,11 +468,11 @@
                         <noDeploy>true</noDeploy>
                     </configuration>
                 </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>2.5.5</version>
-        </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.5.5</version>
+                </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
@@ -598,20 +595,20 @@
     </build>
     <reporting>
         <plugins>
-                <plugin>
-                    <groupId>com.github.bassman5</groupId>
-                    <artifactId>maven-concordion-reporting-plugin</artifactId>
-                    <version>1.0.2</version>
-                    <configuration>
-                        <concordionDir>${basedir}/target/specs</concordionDir>
-                        <concordionIndexFile>index/Specs.html</concordionIndexFile>
-                    </configuration>
-                </plugin>
+            <plugin>
+                <groupId>com.github.bassman5</groupId>
+                <artifactId>maven-concordion-reporting-plugin</artifactId>
+                <version>1.0.2</version>
+                <configuration>
+                    <concordionDir>${basedir}/target/specs</concordionDir>
+                    <concordionIndexFile>index/Specs.html</concordionIndexFile>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin
                 </artifactId>
-        <version>2.8</version>
+                <version>2.8</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -636,24 +633,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.1</version>
+                <version>2.10.1</version>
                 <reportSets>
                     <reportSet>
                         <id>non-aggregate</id>
-                        <configuration>
-                            <excludePackageNames>*impl*,org.dyamand.kernel*,org.dyamand.plugins*
-                            </excludePackageNames>
-                        </configuration>
                         <reports>
                             <report>javadoc</report>
                         </reports>
                     </reportSet>
                     <reportSet>
                         <id>aggregate</id>
-                        <configuration>
-                            <excludePackageNames>*impl*,org.dyamand.kernel*,org.dyamand.plugins*
-                            </excludePackageNames>
-                        </configuration>
                         <reports>
                             <report>aggregate</report>
                         </reports>
@@ -757,7 +746,6 @@
                 <skip.unit.tests>false</skip.unit.tests>
                 <skip.integration.tests>false</skip.integration.tests>
                 <skip.acceptance.tests>false</skip.acceptance.tests>
-            
             </properties>
         </profile>
     </profiles>
