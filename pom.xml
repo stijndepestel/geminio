@@ -44,11 +44,12 @@
             <url>http://dyamand.test/nexus/content/repositories/snapshots/
             </url>
         </snapshotRepository>
-<!--         <site> -->
-<!--             <id>thesis-framework-site</id> -->
-<!--             <url>scp://dyamand.intec.ugent.be:/work/maven-deploy/thesis-framework-${project.version}/ -->
-<!--             </url> -->
-<!--         </site> -->
+        <site>
+            <!-- Use this ID for authentication purposes (config on server). -->
+            <id>dyamand-site</id>
+            <url>scp://dyamand.intec.ugent.be:/work/maven-deploy/thesis-framework-${project.version}/
+            </url>
+        </site>
     </distributionManagement>
     <properties>
         <project.build.sourceEncoding>UTF-8
