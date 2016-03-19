@@ -45,7 +45,7 @@
             </url>
         </snapshotRepository>
         <site>
-            <id>dyamand-site</id>
+            <id>thesis-framework-site</id>
             <url>scp://dyamand.intec.ugent.be:/work/maven-deploy/thesis-framework-${project.version}/
             </url>
         </site>
@@ -166,31 +166,31 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>lt.velykis.maven.skins</groupId>
-                        <artifactId>reflow-velocity-tools</artifactId>
-                        <version>1.1.1</version>
-                    </dependency>
-                    <!-- Reflow skin requires Velocity >= 1.7 -->
-                    <dependency>
-                        <groupId>org.apache.velocity</groupId>
-                        <artifactId>velocity</artifactId>
-                        <version>1.7</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <generateProjectInfo>true</generateProjectInfo>
-                    <generateProjectReports>true
-                    </generateProjectReports>
-                    <generateSitemap>true</generateSitemap>
-                    <relativizeDecorationLinks>true
-                    </relativizeDecorationLinks>
-                </configuration>
-            </plugin>
+<!--             <plugin> -->
+<!--                 <groupId>org.apache.maven.plugins</groupId> -->
+<!--                 <artifactId>maven-site-plugin</artifactId> -->
+<!--                 <dependencies> -->
+<!--                     <dependency> -->
+<!--                         <groupId>lt.velykis.maven.skins</groupId> -->
+<!--                         <artifactId>reflow-velocity-tools</artifactId> -->
+<!--                         <version>1.1.1</version> -->
+<!--                     </dependency> -->
+<!--                     Reflow skin requires Velocity >= 1.7 -->
+<!--                     <dependency> -->
+<!--                         <groupId>org.apache.velocity</groupId> -->
+<!--                         <artifactId>velocity</artifactId> -->
+<!--                         <version>1.7</version> -->
+<!--                     </dependency> -->
+<!--                 </dependencies> -->
+<!--                 <configuration> -->
+<!--                     <generateProjectInfo>true</generateProjectInfo> -->
+<!--                     <generateProjectReports>true -->
+<!--                     </generateProjectReports> -->
+<!--                     <generateSitemap>true</generateSitemap> -->
+<!--                     <relativizeDecorationLinks>true -->
+<!--                     </relativizeDecorationLinks> -->
+<!--                 </configuration> -->
+<!--             </plugin> -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -557,11 +557,11 @@
                         <target>${maven.compiler.target}</target>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>3.4</version>
-                </plugin>
+<!--                 <plugin> -->
+<!--                     <groupId>org.apache.maven.plugins</groupId> -->
+<!--                     <artifactId>maven-site-plugin</artifactId> -->
+<!--                     <version>3.4</version> -->
+<!--                 </plugin> -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
