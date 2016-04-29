@@ -106,7 +106,6 @@ public class CaptureTest {
         this.capture = new Capture<>(
                 TestHelper::serialize,
                 x -> {
-                    System.out.println(x.toString());
                     final JSONArray jsonArray = x
                             .getJSONArray(JSONNames.JSON_EVENTS);
                     Assert.assertEquals(

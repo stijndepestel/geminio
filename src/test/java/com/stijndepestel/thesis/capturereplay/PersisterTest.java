@@ -56,6 +56,28 @@ public class PersisterTest {
     }
 
     /**
+     * Combined persist and load test.
+     *
+     * @throws IOException
+     *             When an IO error occurs during persisting.
+     */
+    @Test
+    public void combinedTest() throws IOException {
+        final String json = "{\"ping\":\"pong\"}";
+        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        final ByteArrayInputStream inputStream = new ByteArrayInputStream(
+                json.getBytes());
+        final Persister persister = new Persister(outputStream, inputStream);
+        persister.persist(new JSONObject(json));
+        Assert.assertEquals("JSON strings should be equal", json,
+                outputStream.toString());
+        final JSONObject jsonObject = persister.load();
+        Assert.assertEquals("JSON strings should be equal", json,
+                jsonObject.toString());
+
+    }
+
+    /**
      * Test for illegal state if no input stream is available.
      */
     @Test(expected = IllegalStateException.class)

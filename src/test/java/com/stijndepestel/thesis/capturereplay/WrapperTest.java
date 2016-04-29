@@ -43,6 +43,27 @@ public class WrapperTest {
                 this.testEvent1.equals(this.testEvent2));
         Assert.assertTrue("Event 2 and event 1 are equal",
                 this.testEvent2.equals(this.testEvent1));
+
+        // test if Wrapper objects are equal
+        final Wrapper<TestEvent> wrapper1 = new Wrapper<TestEvent>(
+                this.testEvent1, this.testEvent1.getTimestamp());
+        final Wrapper<TestEvent> wrapper2 = new Wrapper<TestEvent>(
+                this.testEvent1, this.testEvent1.getTimestamp());
+        final Wrapper<TestEvent> wrapper3 = new Wrapper<TestEvent>(
+                this.testEvent1, this.testEvent1.getTimestamp() + 1);
+        final Wrapper<TestEvent> wrapper4 = new Wrapper<TestEvent>(
+                this.testEvent3, this.testEvent1.getTimestamp());
+        Assert.assertTrue("Wrapper 1 and wrapper 1 are equal",
+                wrapper1.equals(wrapper2));
+        Assert.assertFalse("Wrapper 1 and wrapper 3 are not equal",
+                wrapper1.equals(wrapper3));
+        Assert.assertFalse("Wrapper 1 and wrapper 4 are not equal",
+                wrapper1.equals(wrapper4));
+        Assert.assertFalse("Wrapper 1 is not equal to null",
+                wrapper1.equals(null));
+        Assert.assertFalse("Wrapper 1 is not equal to another object",
+                wrapper1.equals(new Object()));
+
     }
 
     /**

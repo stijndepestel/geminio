@@ -1,6 +1,10 @@
 package com.stijndepestel.thesis.capturereplay;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -30,6 +34,11 @@ public final class Replay<T> {
     private static final long TRESHOLD = 200L;
 
     /**
+     * The list of ReplayListeners.
+     */
+    private final List<ReplayListener> listeners;
+
+    /**
      * Deserializer for the events that will be replayed.
      */
     private final Function<JSONObject, T> deserializer;
@@ -47,10 +56,15 @@ public final class Replay<T> {
     private final Consumer<T> eventCatcher;
 
     /**
+     * Set that holds the events that were loaded.
+     */
+    private final Set<Wrapper<T>> loadedEvents;
+
+    /**
      * Priority queue that holds the events that still have to be replayed.
      * Ordered by the natural ordering (Comparable) of Wrapper.
      */
-    private final PriorityQueue<Wrapper<T>> queue;
+    private PriorityQueue<Wrapper<T>> queue;
 
     /**
      * The current state of the replay object.
@@ -61,6 +75,16 @@ public final class Replay<T> {
      * Timestamp of when replay started.
      */
     private long replayStart;
+
+    /**
+     * Counter for the number of replayed events.
+     */
+    private int replayCounter;
+
+    /**
+     * Flag to indicate that a stop was requested.
+     */
+    private boolean stopRequested;
 
     /**
      * Create new Replay object.
@@ -81,12 +105,13 @@ public final class Replay<T> {
         this.deserializer = deserializer;
         this.loader = loader;
         this.eventCatcher = eventCatcher;
-        this.queue = new PriorityQueue<>();
+        this.listeners = new ArrayList<>();
+        this.loadedEvents = new HashSet<>();
         this.currentState = State.CREATED;
     }
 
     /**
-     * Load the events.
+     * Load and deserialize the events from their persisted state.
      *
      * @return Reference to this instance.
      */
@@ -97,24 +122,58 @@ public final class Replay<T> {
         // Get the json
         final JSONArray jsonarr = this.loader.get().getJSONArray(
                 JSONNames.JSON_EVENTS);
-        jsonarr.forEach(json -> this.queue.add(new Wrapper<>((JSONObject) json,
-                this.deserializer)));
+        jsonarr.forEach(json -> this.loadedEvents.add(new Wrapper<>(
+                (JSONObject) json, this.deserializer)));
         this.currentState = State.LOADED;
         return this;
     }
 
     /**
-     * Start the replay, will load and deserialize all events and start
-     * replaying them.
+     * Reset the replay object to the LOADED state.
+     *
+     * @return Reference to this instance.
+     */
+    public Replay<T> reset() {
+        if (this.currentState != State.STOPPED) {
+            throw new IllegalStateException(Replay.ERROR_MESSAGE);
+        }
+        this.currentState = State.LOADED;
+        return this;
+    }
+
+    /**
+     * Start the replay, will load all events into a queue and start replaying
+     * them.
      */
     public void startReplay() {
         if (this.currentState != State.LOADED) {
             throw new IllegalStateException(Replay.ERROR_MESSAGE);
         }
+        this.queue = new PriorityQueue<>(this.loadedEvents);
         this.currentState = State.REPLAYING;
+        this.replayCounter = 0;
         this.replayStart = System.currentTimeMillis();
-        // start replay
-        this.replay();
+        // start replay in a thread
+        new Thread(this::replay).start();
+    }
+
+    /**
+     * Request a stop of the current replay. After this request maximum one more
+     * event will be replayed.
+     *
+     * @return true if the stop was requested, false if the replay had already
+     *         ended.
+     */
+    public boolean stopReplay() {
+        if (this.currentState == State.STOPPED) {
+            return false;
+        }
+        if (this.currentState == State.CREATED
+                || this.currentState == State.LOADED) {
+            throw new IllegalStateException(Replay.ERROR_MESSAGE);
+        }
+        this.stopRequested = true;
+        return true;
     }
 
     /**
@@ -127,6 +186,7 @@ public final class Replay<T> {
         if (this.queue.isEmpty()) {
             // end of replay
             this.currentState = State.STOPPED;
+            this.throwEnded();
             return;
         }
         final long nextReplayTime = this.queue.peek().getRelativeTimestamp();
@@ -136,6 +196,7 @@ public final class Replay<T> {
         if (toSleep < Replay.TRESHOLD) {
             // throw event
             this.eventCatcher.accept(this.queue.poll().getEvent());
+            this.replayCounter++;
         } else {
             try {
                 Thread.sleep(toSleep);
@@ -144,7 +205,50 @@ public final class Replay<T> {
             }
         }
         // Recursion
-        this.replay();
+        if (this.stopRequested) {
+            this.throwFailed();
+        } else {
+            this.replay();
+        }
+
+    }
+
+    /**
+     * Add a replay listener.
+     *
+     * @param listener
+     *            The ReplayListener to add.
+     */
+    public void addReplayListener(final ReplayListener listener) {
+        this.listeners.add(listener);
+    }
+
+    /**
+     * Remove a replay listener.
+     *
+     * @param listener
+     *            The ReplayListener to remove.
+     */
+    public void removeReplayListener(final ReplayListener listener) {
+        this.listeners.remove(listener);
+    }
+
+    /**
+     * Throw a ReplayEvent to the listeners to notify them of the end of the
+     * replay.
+     */
+    private void throwEnded() {
+        final ReplayEvent event = new ReplayEvent(this.replayCounter);
+        this.listeners.forEach(l -> l.replayEnded(event));
+    }
+
+    /**
+     * Throw a ReplayEvent to the listeners to notify them of the failing of the
+     * replay.
+     */
+    private void throwFailed() {
+        final ReplayEvent event = new ReplayEvent(this.replayCounter);
+        this.listeners.forEach(l -> l.replayFailed(event));
     }
 
     /**

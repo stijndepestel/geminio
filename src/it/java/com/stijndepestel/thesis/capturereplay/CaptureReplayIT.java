@@ -2,12 +2,16 @@ package com.stijndepestel.thesis.capturereplay;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.jayway.awaitility.Awaitility;
 
 /**
  * Integration test for the complete capture/replay functionality.
@@ -99,10 +103,24 @@ public final class CaptureReplayIT {
         replay.load();
         // Set the previoustimestamp for the first iteration.
         this.previousTimestamp = System.currentTimeMillis();
+        // set listener
+        final TestReplayListener listener = new TestReplayListener();
+        replay.addReplayListener(listener);
         // Start the replay.
         replay.startReplay();
+        // Await till replay has finished
+        Awaitility.await().atMost(3, TimeUnit.MINUTES)
+                .until(this.hasReplayEnded(listener));
         // Assert that the catched events are equal to the replayed events (deep
         // equals).
         Assert.assertArrayEquals(eventsToThrow, catchedEvents.toArray());
+    }
+
+    private Callable<Boolean> hasReplayEnded(final TestReplayListener listener) {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception {
+                return listener.hasReplayEnded();
+            }
+        };
     }
 }
