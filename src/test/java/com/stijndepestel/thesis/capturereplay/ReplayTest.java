@@ -113,10 +113,11 @@ public class ReplayTest {
     }
 
     /**
-     * Test that an exception is thrown when starting with an invalid state.
+     * Test that an exception is thrown when starting with an invalid state
+     * (CREATED).
      */
     @Test(expected = IllegalStateException.class)
-    public void exceptionOnStartWithInvalidStateTest() {
+    public void exceptionOnStartWithStateCreatedTest() {
         // no load
         this.replay.startReplay();
     }
@@ -155,12 +156,21 @@ public class ReplayTest {
     }
 
     /**
-     * Test that an exception is thrown when stopping a test on an invalid
-     * state.
+     * Test that an exception is thrown when stopping a test on an invalid state
+     * (CREATED).
      */
     @Test(expected = IllegalStateException.class)
-    public void exceptionOnStopWithInvalidStateTest() {
+    public void exceptionOnStopWithStateCreatedTest() {
         this.replay.stopReplay();
+    }
+
+    /**
+     * Test that an exception is thrown when stopping a test on an invalid state
+     * (LOADED).
+     */
+    @Test(expected = IllegalStateException.class)
+    public void exceptionOnStopWithStateLoadedTest() {
+        this.replay.load().stopReplay();
     }
 
     private Callable<Boolean> hasReplayFailed(final TestReplayListener listener) {
@@ -174,6 +184,7 @@ public class ReplayTest {
     /**
      * Check if a removed listener is not fired.
      */
+    @Test
     public void removedListenerShouldNotFire() {
         final ReplayListener listener = new ReplayListener() {
 
