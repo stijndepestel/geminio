@@ -12,8 +12,6 @@ import java.util.function.Supplier;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.stijndepestel.thesis.capturereplay.ReplayListener.ReplayEvent;
-
 /**
  * Defines the methods to replay captured events.
  *
@@ -36,7 +34,7 @@ public final class Replay<T> {
     private static final long TRESHOLD = 200L;
 
     /**
-     * The list of ReplayListeners
+     * The list of ReplayListeners.
      */
     private final List<ReplayListener> listeners;
 
@@ -194,10 +192,10 @@ public final class Replay<T> {
             }
         }
         // Recursion
-        if (!this.stopRequested) {
-            this.replay();
-        } else {
+        if (this.stopRequested) {
             this.throwFailed();
+        } else {
+            this.replay();
         }
 
     }

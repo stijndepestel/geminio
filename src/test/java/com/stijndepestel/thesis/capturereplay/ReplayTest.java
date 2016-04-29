@@ -102,7 +102,9 @@ public class ReplayTest {
         final TestReplayListener listener = new TestReplayListener();
         this.replay.addReplayListener(listener);
         this.replay.load().startReplay();
-        Assert.assertTrue(this.replay.stopReplay());
+        Assert.assertTrue(
+                "Should return true when stop request is succesfully received.",
+                this.replay.stopReplay());
         Awaitility.await().atMost(1, TimeUnit.SECONDS)
                 .until(this.hasReplayFailed(listener));
         Assert.assertEquals("Failed counter is 1", 1,
@@ -129,12 +131,66 @@ public class ReplayTest {
         this.replay.load();
     }
 
+    /**
+     * Test to check if false is returned when stopping an already stopped
+     * replay.
+     */
+    @Test
+    public void stopReplayOnStoppedStateTest() {
+        this.replay.addReplayListener(new ReplayListener() {
+
+            @Override
+            public void replayEnded(final ReplayEvent event) {
+                Assert.assertFalse("False when stopping on STOPPED state.",
+                        ReplayTest.this.replay.stopReplay());
+            }
+
+            @Override
+            public void replayFailed(final ReplayEvent event) {
+                // ignore
+            }
+
+        });
+        this.replay.load().startReplay();
+    }
+
+    /**
+     * Test that an exception is thrown when stopping a test on an invalid
+     * state.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void exceptionOnStopWithInvalidStateTest() {
+        this.replay.stopReplay();
+    }
+
     private Callable<Boolean> hasReplayFailed(final TestReplayListener listener) {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception {
                 return listener.hasReplayFailed();
             }
         };
+    }
+
+    /**
+     * Check if a removed listener is not fired.
+     */
+    public void removedListenerShouldNotFire() {
+        final ReplayListener listener = new ReplayListener() {
+
+            @Override
+            public void replayFailed(final ReplayEvent event) {
+                Assert.fail("Should not fire");
+            }
+
+            @Override
+            public void replayEnded(final ReplayEvent event) {
+                Assert.fail("Should not fire");
+
+            }
+        };
+        this.replay.addReplayListener(listener);
+        this.replay.removeReplayListener(listener);
+        this.replay.load().startReplay();
     }
 
     private Callable<Boolean> hasReplayEnded(final TestReplayListener listener) {
