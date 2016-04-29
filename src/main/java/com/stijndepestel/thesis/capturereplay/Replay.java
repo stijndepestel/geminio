@@ -129,6 +129,19 @@ public final class Replay<T> {
     }
 
     /**
+     * Reset the replay object to the LOADED state.
+     *
+     * @return Reference to this instance.
+     */
+    public Replay<T> reset() {
+        if (this.currentState != State.STOPPED) {
+            throw new IllegalStateException(Replay.ERROR_MESSAGE);
+        }
+        this.currentState = State.LOADED;
+        return this;
+    }
+
+    /**
      * Start the replay, will load all events into a queue and start replaying
      * them.
      */

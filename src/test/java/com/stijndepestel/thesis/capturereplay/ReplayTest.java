@@ -173,12 +173,50 @@ public class ReplayTest {
         this.replay.load().stopReplay();
     }
 
-    private Callable<Boolean> hasReplayFailed(final TestReplayListener listener) {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception {
-                return listener.hasReplayFailed();
+    /**
+     * Test for the reset functionality of the Replay.
+     */
+    @Test
+    public void resetReplayTest() {
+        this.replay.addReplayListener(new ReplayListener() {
+
+            @Override
+            public void replayEnded(final ReplayEvent event) {
+                ReplayTest.this.replay.reset();
             }
-        };
+
+            @Override
+            public void replayFailed(final ReplayEvent event) {
+                // ignore
+            }
+
+        });
+        this.replay.load().startReplay();
+    }
+
+    /**
+     * Test for exception on reset with CREATED state.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void exceptionOnResetWithStateCreatedTest() {
+        this.replay.reset();
+    }
+
+    /**
+     * Test for exception on reset with LOADED state.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void exceptionOnResetWithStateLoadedTest() {
+        this.replay.load().reset();
+    }
+
+    /**
+     * Test for exception on reset with STOPPED state.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void exceptionOnResetWithStateReplayingTest() {
+        this.replay.load().startReplay();
+        this.replay.reset();
     }
 
     /**
@@ -208,6 +246,14 @@ public class ReplayTest {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception {
                 return listener.hasReplayEnded();
+            }
+        };
+    }
+
+    private Callable<Boolean> hasReplayFailed(final TestReplayListener listener) {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception {
+                return listener.hasReplayFailed();
             }
         };
     }
