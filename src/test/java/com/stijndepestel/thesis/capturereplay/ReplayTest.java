@@ -109,7 +109,6 @@ public class ReplayTest {
                 .until(this.hasReplayFailed(listener));
         Assert.assertEquals("Failed counter is 1", 1,
                 listener.getFailedCounter());
-        System.out.println(listener.getLastFailedEventsCount());
     }
 
     /**
