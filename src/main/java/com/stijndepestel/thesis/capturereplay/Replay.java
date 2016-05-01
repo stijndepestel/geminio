@@ -53,7 +53,7 @@ public final class Replay<T> {
     /**
      * Catcher of the events that will be replayed.
      */
-    private final Consumer<T> eventCatcher;
+    private Consumer<T> eventCatcher;
 
     /**
      * Set that holds the events that were loaded.
@@ -111,6 +111,16 @@ public final class Replay<T> {
     }
 
     /**
+     * Set the eventCatcher for the replay.
+     * 
+     * @param eventCatcher
+     *            Catcher of the event that will be thrown by the replay.
+     */
+    public void setEventCatcher(final Consumer<T> eventCatcher) {
+        this.eventCatcher = eventCatcher;
+    }
+
+    /**
      * Load and deserialize the events from their persisted state.
      *
      * @return Reference to this instance.
@@ -120,23 +130,10 @@ public final class Replay<T> {
             throw new IllegalStateException(Replay.ERROR_MESSAGE);
         }
         // Get the json
-        final JSONArray jsonarr = this.loader.get().getJSONArray(
-                JSONNames.JSON_EVENTS);
-        jsonarr.forEach(json -> this.loadedEvents.add(new Wrapper<>(
-                (JSONObject) json, this.deserializer)));
-        this.currentState = State.LOADED;
-        return this;
-    }
-
-    /**
-     * Reset the replay object to the LOADED state.
-     *
-     * @return Reference to this instance.
-     */
-    public Replay<T> reset() {
-        if (this.currentState != State.STOPPED) {
-            throw new IllegalStateException(Replay.ERROR_MESSAGE);
-        }
+        final JSONArray jsonarr = this.loader.get()
+                .getJSONArray(JSONNames.JSON_EVENTS);
+        jsonarr.forEach(json -> this.loadedEvents
+                .add(new Wrapper<>((JSONObject) json, this.deserializer)));
         this.currentState = State.LOADED;
         return this;
     }
@@ -174,6 +171,19 @@ public final class Replay<T> {
         }
         this.stopRequested = true;
         return true;
+    }
+
+    /**
+     * Reset the replay object to the LOADED state.
+     *
+     * @return Reference to this instance.
+     */
+    public Replay<T> reset() {
+        if (this.currentState != State.STOPPED) {
+            throw new IllegalStateException(Replay.ERROR_MESSAGE);
+        }
+        this.currentState = State.LOADED;
+        return this;
     }
 
     /**
