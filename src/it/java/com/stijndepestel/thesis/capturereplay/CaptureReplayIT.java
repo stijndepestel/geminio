@@ -114,9 +114,11 @@ public final class CaptureReplayIT {
         // Assert that the catched events are equal to the replayed events (deep
         // equals).
         Assert.assertArrayEquals(eventsToThrow, catchedEvents.toArray());
+        Assert.assertTrue("Replay is in stopped state.", replay.hasEnded());
     }
 
-    private Callable<Boolean> hasReplayEnded(final TestReplayListener listener) {
+    private Callable<Boolean> hasReplayEnded(
+            final TestReplayListener listener) {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception {
                 return listener.hasReplayEnded();

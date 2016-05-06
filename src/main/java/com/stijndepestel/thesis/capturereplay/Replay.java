@@ -112,7 +112,7 @@ public final class Replay<T> {
 
     /**
      * Set the eventCatcher for the replay.
-     * 
+     *
      * @param eventCatcher
      *            Catcher of the event that will be thrown by the replay.
      */
@@ -171,6 +171,16 @@ public final class Replay<T> {
         }
         this.stopRequested = true;
         return true;
+    }
+
+    /**
+     * Indicates whether or not the object is in the stopped state, i.e., the
+     * replay has ended.
+     * 
+     * @return true if the replay has ended, false otherwise.
+     */
+    public boolean hasEnded() {
+        return this.currentState == State.STOPPED;
     }
 
     /**

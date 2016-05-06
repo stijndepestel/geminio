@@ -83,6 +83,8 @@ public class ReplayTest {
                 .until(this.hasReplayEnded(listener));
         Assert.assertEquals("All events were replayed", this.fakeEvents.length,
                 listener.getLastEndedEventsCount());
+        Assert.assertTrue("Replay is in stopped state.",
+                this.replay.hasEnded());
     }
 
     private void eventsReplayedTestHelper(final TestEvent event) {
