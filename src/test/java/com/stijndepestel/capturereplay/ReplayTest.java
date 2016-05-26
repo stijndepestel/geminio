@@ -1,4 +1,4 @@
-package com.stijndepestel.thesis.capturereplay;
+package com.stijndepestel.capturereplay;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -9,6 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.jayway.awaitility.Awaitility;
+import com.stijndepestel.capturereplay.Replay;
+import com.stijndepestel.capturereplay.ReplayEvent;
+import com.stijndepestel.capturereplay.ReplayListener;
 
 /**
  * Test for the replay functionality.

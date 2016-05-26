@@ -1,4 +1,7 @@
-package com.stijndepestel.thesis.capturereplay;
+package com.stijndepestel.capturereplay;
+
+import com.stijndepestel.capturereplay.ReplayEvent;
+import com.stijndepestel.capturereplay.ReplayListener;
 
 /**
  * ReplayListener for testing purposes.

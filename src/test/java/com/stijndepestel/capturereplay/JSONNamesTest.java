@@ -1,4 +1,4 @@
-package com.stijndepestel.thesis.capturereplay;
+package com.stijndepestel.capturereplay;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -6,6 +6,8 @@ import java.lang.reflect.Modifier;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.stijndepestel.capturereplay.JSONNames;
 
 /**
  * Unit tests for the JSONNames class.
