@@ -1,3 +1,3 @@
-# Thesis: Development of a Testing Framework for Connected Devices. #
+# Capture/Replay framework. #
 
-This repository will hold all code concerning the thesis: Development of a Testing Framework for Connected Devices.
+This framework allows testing of o.a. IoT devices. More info to follow.
