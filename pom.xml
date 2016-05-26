@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.stijndepestel</groupId>
-    <artifactId>thesis-framework</artifactId>
+    <artifactId>capturereplay-framework</artifactId>
     <version>0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Thesis Framework</name>
-    <description>Mock framework for connected devices, a.o. capture/replay functionality. Part of thesis project.</description>
+    <name>Capture/Replay testing framework</name>
+    <description>Mock framework for connected devices, a.o. capture/replay functionality.</description>
     <url>http://${dyamand.development.server}/stijnthesis-${project.version}/</url>
     <developers>
         <developer>
