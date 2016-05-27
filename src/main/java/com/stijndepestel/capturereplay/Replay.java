@@ -216,7 +216,6 @@ public final class Replay<T> {
         if (toSleep < Replay.TRESHOLD) {
             // throw event
             final T event = this.queue.poll().getEvent();
-            // new Thread(() -> this.eventCatcher.accept(event)).start();
             this.eventCatcher.accept(event);
             this.replayCounter++;
         } else {
