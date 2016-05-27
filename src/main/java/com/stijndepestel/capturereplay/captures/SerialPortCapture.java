@@ -237,7 +237,7 @@ public final class SerialPortCapture {
 
         // Set event listener
         serialPort.addEventListener(event -> {
-            SerialPortCapture.this.filter.ifPresent(f -> {
+            this.filter.ifPresent(f -> {
                 if (!f.apply(event)) {
                     return;
                 }
