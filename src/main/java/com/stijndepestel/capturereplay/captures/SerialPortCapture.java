@@ -15,7 +15,6 @@ import com.stijndepestel.capturereplay.Capture;
 
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
-import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
 
 /**
@@ -42,7 +41,7 @@ public final class SerialPortCapture {
     private static final int SERIAL_PORT_BOOLEAN_PARAMS_LENGTH = 2;
 
     /**
-     * Name of the serial port (e.g., /dev/ttyUSB0 )
+     * Name of the serial port (e.g., /dev/ttyUSB0 ).
      */
     private final String serialPortName;
     /**
@@ -237,25 +236,21 @@ public final class SerialPortCapture {
         }
 
         // Set event listener
-        serialPort.addEventListener(new SerialPortEventListener() {
-
-            @Override
-            public void serialEvent(final SerialPortEvent event) {
-                SerialPortCapture.this.filter.ifPresent(f -> {
-                    if (!f.apply(event)) {
-                        return;
-                    }
-                });
-                final int nrOfBytes = event.getEventValue();
-                try {
-                    System.out.print("x");
-                    capture.capture(SerialPortCapture
-                            .boxByteArray(serialPort.readBytes(nrOfBytes)));
-                } catch (final SerialPortException e) {
-                    SerialPortCapture.LOGGER.error(
-                            "Something went wrong while reading the serial port input.",
-                            e);
+        serialPort.addEventListener(event -> {
+            SerialPortCapture.this.filter.ifPresent(f -> {
+                if (!f.apply(event)) {
+                    return;
                 }
+            });
+            try {
+                System.out.print("x");
+                final int nrOfBytes = event.getEventValue();
+                capture.capture(SerialPortCapture
+                        .boxByteArray(serialPort.readBytes(nrOfBytes)));
+            } catch (final SerialPortException e) {
+                SerialPortCapture.LOGGER.error(
+                        "Something went wrong while reading the serial port input.",
+                        e);
             }
         });
 
@@ -280,7 +275,7 @@ public final class SerialPortCapture {
     private static Byte[] boxByteArray(final byte[] arr) {
         final Byte[] boxedBytes = new Byte[arr.length];
         for (int i = 0; i < arr.length; i++) {
-            boxedBytes[i] = new Byte(arr[i]);
+            boxedBytes[i] = Byte.valueOf(arr[i]);
         }
         return boxedBytes;
     }
