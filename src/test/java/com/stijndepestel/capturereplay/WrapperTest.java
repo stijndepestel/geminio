@@ -1,7 +1,9 @@
-package com.stijndepestel.thesis.capturereplay;
+package com.stijndepestel.capturereplay;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.stijndepestel.capturereplay.Wrapper;
 
 /**
  * Unit tests for the Wrapper class.

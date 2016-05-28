@@ -4,4 +4,4 @@
  * @author sjdpeste
  *
  */
-package com.stijndepestel.thesis.capturereplay;
+package com.stijndepestel.capturereplay;

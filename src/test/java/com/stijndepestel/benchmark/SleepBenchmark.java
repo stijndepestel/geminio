@@ -1,4 +1,4 @@
-package com.stijndepestel.thesis.benchmark;
+package com.stijndepestel.benchmark;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

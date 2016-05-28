@@ -1,4 +1,4 @@
-package com.stijndepestel.thesis.capturereplay;
+package com.stijndepestel.capturereplay;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides functionality for persisting a JSON object.
@@ -73,10 +74,8 @@ public final class Persister {
      *
      * @param json
      *            The json to persist.
-     * @throws IOException
-     *             When an IO error occurs during persisting.
      */
-    public void persist(final JSONObject json) throws IOException {
+    public void persist(final JSONObject json) {
         if (!this.outputStream.isPresent()) {
             throw new IllegalStateException("Output stream not present.");
         }
@@ -84,6 +83,9 @@ public final class Persister {
                 new OutputStreamWriter(this.outputStream.get(), "UTF8"))) {
             writer.append(json.toString());
             writer.flush();
+        } catch (final IOException e) {
+            LoggerFactory.getLogger(Persister.class.getName())
+                    .error("IO Exception during persisting.", e);
         }
     }
 
@@ -96,7 +98,8 @@ public final class Persister {
         if (!this.inputStream.isPresent()) {
             throw new IllegalStateException("Input stream not present.");
         }
-        try (final Scanner scanner = new Scanner(this.inputStream.get(), "UTF8")) {
+        try (final Scanner scanner = new Scanner(this.inputStream.get(),
+                "UTF8")) {
             final StringBuilder sb = new StringBuilder(1024);
             while (scanner.hasNextLine()) {
                 sb.append(scanner.nextLine());

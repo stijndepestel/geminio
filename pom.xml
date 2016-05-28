@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.stijndepestel</groupId>
-    <artifactId>thesis-framework</artifactId>
-    <version>0.2.1</version>
+    <artifactId>capturereplay-framework</artifactId>
+    <version>0.3</version>
     <packaging>jar</packaging>
-    <name>Thesis Framework</name>
-    <description>Mock framework for connected devices, a.o. capture/replay functionality. Part of thesis project.</description>
+    <name>Capture/Replay testing framework</name>
+    <description>Mock framework for connected devices, a.o. capture/replay functionality.</description>
     <url>http://${dyamand.development.server}/stijnthesis-${project.version}/</url>
     <developers>
         <developer>
@@ -89,18 +89,18 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.0</version>
-            <scope>provided</scope>
+            <groupId>org.scream3r</groupId>
+            <artifactId>jssc</artifactId>
+            <version>2.8.0</version>
         </dependency>
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>junitperf</groupId>
             <artifactId>junitperf</artifactId>
             <version>1.8</version>
@@ -117,7 +117,7 @@
             <artifactId>concordion</artifactId>
             <version>1.5.1</version>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.jayway.awaitility</groupId>
             <artifactId>awaitility</artifactId>

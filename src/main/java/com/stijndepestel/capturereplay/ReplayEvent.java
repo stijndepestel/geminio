@@ -1,4 +1,4 @@
-package com.stijndepestel.thesis.capturereplay;
+package com.stijndepestel.capturereplay;
 
 /**
  * A ReplayEvent contains information concerning the Replay and the state of the

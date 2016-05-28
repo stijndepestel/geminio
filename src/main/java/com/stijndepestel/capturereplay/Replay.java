@@ -1,4 +1,4 @@
-package com.stijndepestel.thesis.capturereplay;
+package com.stijndepestel.capturereplay;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -112,7 +112,7 @@ public final class Replay<T> {
 
     /**
      * Set the eventCatcher for the replay.
-     * 
+     *
      * @param eventCatcher
      *            Catcher of the event that will be thrown by the replay.
      */
@@ -174,6 +174,16 @@ public final class Replay<T> {
     }
 
     /**
+     * Indicates whether or not the object is in the stopped state, i.e., the
+     * replay has ended.
+     *
+     * @return true if the replay has ended, false otherwise.
+     */
+    public boolean hasEnded() {
+        return this.currentState == State.STOPPED;
+    }
+
+    /**
      * Reset the replay object to the LOADED state.
      *
      * @return Reference to this instance.
@@ -205,7 +215,8 @@ public final class Replay<T> {
         // if within treshold
         if (toSleep < Replay.TRESHOLD) {
             // throw event
-            this.eventCatcher.accept(this.queue.poll().getEvent());
+            final T event = this.queue.poll().getEvent();
+            this.eventCatcher.accept(event);
             this.replayCounter++;
         } else {
             try {

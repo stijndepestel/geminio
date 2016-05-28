@@ -1,9 +1,12 @@
-package com.stijndepestel.thesis.capturereplay;
+package com.stijndepestel.capturereplay;
 
 import org.json.JSONArray;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.stijndepestel.capturereplay.Capture;
+import com.stijndepestel.capturereplay.JSONNames;
 
 /**
  * Test for the capture functionality.

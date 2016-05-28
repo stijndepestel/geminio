@@ -1,4 +1,4 @@
-package com.stijndepestel.thesis.capturereplay;
+package com.stijndepestel.capturereplay;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -7,6 +7,8 @@ import java.io.IOException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.stijndepestel.capturereplay.Persister;
 
 /**
  * Unit tests for the Persister class.

@@ -4,4 +4,4 @@
  * @author sjdpeste
  *
  */
-package com.stijndepestel.thesis.benchmark;
+package com.stijndepestel.benchmark;
