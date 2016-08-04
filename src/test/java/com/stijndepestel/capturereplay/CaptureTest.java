@@ -1,12 +1,32 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2016 Stijn De Pestel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.stijndepestel.capturereplay;
 
 import org.json.JSONArray;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.stijndepestel.capturereplay.Capture;
-import com.stijndepestel.capturereplay.JSONNames;
 
 /**
  * Test for the capture functionality.
@@ -106,15 +126,12 @@ public class CaptureTest {
     @Test
     public void persisterGetsJSONOfAllEvents() {
         final int numberOfEventsToGenerate = 5;
-        this.capture = new Capture<>(
-                TestHelper::serialize,
-                x -> {
-                    final JSONArray jsonArray = x
-                            .getJSONArray(JSONNames.JSON_EVENTS);
-                    Assert.assertEquals(
-                            "Same number of events should be stored as the number of events that were thrown.",
-                            numberOfEventsToGenerate, jsonArray.length());
-                });
+        this.capture = new Capture<>(TestHelper::serialize, x -> {
+            final JSONArray jsonArray = x.getJSONArray(JSONNames.JSON_EVENTS);
+            Assert.assertEquals(
+                    "Same number of events should be stored as the number of events that were thrown.",
+                    numberOfEventsToGenerate, jsonArray.length());
+        });
         this.capture.startCapture();
         for (int i = 0; i < numberOfEventsToGenerate; i++) {
             this.capture.capture(new TestEvent());
