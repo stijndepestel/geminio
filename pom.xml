@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.dyamand</groupId>
         <artifactId>dyamand-root</artifactId>
-        <version>0.11</version>
+        <version>0.11.1</version>
     </parent>
     <groupId>com.stijndepestel</groupId>
     <artifactId>capturereplay-framework</artifactId>
@@ -11,12 +11,11 @@
     <packaging>jar</packaging>
     <name>Capture/Replay testing framework</name>
     <description>Mock framework for connected devices, a.o. capture/replay functionality.</description>
-<!--     <url>http://${dyamand.development.server}/capturereplay-framework-${project.version}/</url> -->
     <developers>
         <developer>
             <id>sjdpeste</id>
             <name>Stijn De Pestel</name>
-            <email>stijn.depestel@intec.ugent.be</email>
+            <email>stijn.depestel@gmail.com</email>
             <roles>
                 <role>architect</role>
                 <role>developer</role>
