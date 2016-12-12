@@ -1,0 +1,40 @@
+apply plugin: 'java'
+
+group = 'com.stijndepestel'
+version = '0.5'
+
+description = "Capture/Replay testing framework. Aimed at (COTS) IoT devices, but useable in other situations as well."
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+sourceSets {
+    integrationTest {
+        java { srcDirs = ['src/it/java'] }
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+dependencies {
+    compile 'org.json:json:20160810'
+    compile 'org.slf4j:slf4j-api:1.7.21'
+    compile 'org.slf4j:slf4j-jdk14:1.7.21'
+    compile 'org.scream3r:jssc:2.8.0'
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.jayway.awaitility:awaitility:1.6.3'
+}
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
