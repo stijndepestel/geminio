@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.stijndepestel.capturereplay.captures;
+package com.stijndepestel.geminio.captures;
 
 import java.util.Optional;
 import java.util.Scanner;
@@ -34,7 +34,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.stijndepestel.capturereplay.Capture;
+import com.stijndepestel.geminio.Capture;
 
 import jssc.SerialPort;
 import jssc.SerialPortEvent;

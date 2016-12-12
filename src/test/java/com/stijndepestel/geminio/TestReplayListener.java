@@ -21,37 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.stijndepestel.capturereplay;
+package com.stijndepestel.geminio;
 
 /**
- * Definitions of the keys for the persisted JSON.
+ * ReplayListener for testing purposes.
  *
  * @author sjdpeste
  *
  */
-public final class JSONNames {
+class TestReplayListener implements ReplayListener {
+    private int endedCounter = 0, failedCounter = 0;
 
-    /**
-     * JSON key for the attribute containing the list of events.
-     */
-    public static final String JSON_EVENTS = "events";
-    /**
-     * JSON key for a single event.
-     */
-    public static final String JSON_EVENT = "event";
-    /**
-     * JSON key for the relative time for an event.
-     */
-    public static final String JSON_REL_TIME = "relative_time";
+    private int lastEndedEventsCount = -1, lastFailedEventsCount = -1;
 
-    /**
-     * Default private constructor.
-     *
-     * @throws InstantiationError
-     *             Class cannot be instantiated.
-     */
-    private JSONNames() {
-        throw new InstantiationError("Class cannot be instantiated.");
+    @Override
+    public void replayEnded(final ReplayEvent event) {
+        this.endedCounter++;
+        this.lastEndedEventsCount = event.getTotalEventsReplayed();
     }
 
+    public boolean hasReplayEnded() {
+        return this.endedCounter != 0;
+    }
+
+    @Override
+    public void replayFailed(final ReplayEvent event) {
+        this.failedCounter++;
+        this.lastFailedEventsCount = event.getTotalEventsReplayed();
+    }
+
+    public boolean hasReplayFailed() {
+        return this.failedCounter != 0;
+    }
+
+    public int getLastEndedEventsCount() {
+        return this.lastEndedEventsCount;
+    }
+
+    public int getLastFailedEventsCount() {
+        return this.lastFailedEventsCount;
+    }
+
+    public int getEndedCounter() {
+        return this.endedCounter;
+    }
+
+    public int getFailedCounter() {
+        return this.failedCounter;
+    }
 }

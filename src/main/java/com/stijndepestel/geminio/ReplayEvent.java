@@ -21,42 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.stijndepestel.capturereplay;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
-
-import org.junit.Assert;
-import org.junit.Test;
+package com.stijndepestel.geminio;
 
 /**
- * Unit tests for the JSONNames class.
+ * A ReplayEvent contains information concerning the Replay and the state of the
+ * replay when a specific event occurs.
  *
  * @author sjdpeste
  *
  */
-public class JSONNamesTest {
+public final class ReplayEvent {
 
     /**
-     * Test to see if the JSONNames class cannot be instantiated.
-     *
-     * @throws NoSuchMethodException
-     * @throws SecurityException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws IllegalArgumentException
-     * @throws InvocationTargetException
+     * The total events that were replayed during the replay.
      */
-    @Test(expected = Exception.class)
-    public void jSONNamesNotConstructable() throws NoSuchMethodException,
-            SecurityException, InstantiationException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException {
-        final Constructor<JSONNames> constructor = JSONNames.class
-                .getDeclaredConstructor();
-        Assert.assertTrue("Constructor should be private",
-                Modifier.isPrivate(constructor.getModifiers()));
-        constructor.setAccessible(true);
-        constructor.newInstance();
+    private final int totalEventsReplayed;
+
+    /**
+     * Create a new ReplayEvent.
+     *
+     * @param totalEventsReplayed
+     *            The total number of events that were replayed before this
+     *            event occurred.
+     */
+    public ReplayEvent(final int totalEventsReplayed) {
+        this.totalEventsReplayed = totalEventsReplayed;
     }
+
+    /**
+     * Get the total number of replayed events during the replay.
+     *
+     * @return The total number of events that were replayed.
+     */
+    public int getTotalEventsReplayed() {
+        return this.totalEventsReplayed;
+    }
+
 }

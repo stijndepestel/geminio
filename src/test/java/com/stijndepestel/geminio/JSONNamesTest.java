@@ -21,52 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.stijndepestel.capturereplay;
+package com.stijndepestel.geminio;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * ReplayListener for testing purposes.
+ * Unit tests for the JSONNames class.
  *
  * @author sjdpeste
  *
  */
-class TestReplayListener implements ReplayListener {
-    private int endedCounter = 0, failedCounter = 0;
+public class JSONNamesTest {
 
-    private int lastEndedEventsCount = -1, lastFailedEventsCount = -1;
-
-    @Override
-    public void replayEnded(final ReplayEvent event) {
-        this.endedCounter++;
-        this.lastEndedEventsCount = event.getTotalEventsReplayed();
-    }
-
-    public boolean hasReplayEnded() {
-        return this.endedCounter != 0;
-    }
-
-    @Override
-    public void replayFailed(final ReplayEvent event) {
-        this.failedCounter++;
-        this.lastFailedEventsCount = event.getTotalEventsReplayed();
-    }
-
-    public boolean hasReplayFailed() {
-        return this.failedCounter != 0;
-    }
-
-    public int getLastEndedEventsCount() {
-        return this.lastEndedEventsCount;
-    }
-
-    public int getLastFailedEventsCount() {
-        return this.lastFailedEventsCount;
-    }
-
-    public int getEndedCounter() {
-        return this.endedCounter;
-    }
-
-    public int getFailedCounter() {
-        return this.failedCounter;
+    /**
+     * Test to see if the JSONNames class cannot be instantiated.
+     *
+     * @throws NoSuchMethodException
+     * @throws SecurityException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws IllegalArgumentException
+     * @throws InvocationTargetException
+     */
+    @Test(expected = Exception.class)
+    public void jSONNamesNotConstructable() throws NoSuchMethodException,
+            SecurityException, InstantiationException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException {
+        final Constructor<JSONNames> constructor = JSONNames.class
+                .getDeclaredConstructor();
+        Assert.assertTrue("Constructor should be private",
+                Modifier.isPrivate(constructor.getModifiers()));
+        constructor.setAccessible(true);
+        constructor.newInstance();
     }
 }

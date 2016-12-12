@@ -22,6 +22,9 @@
  * SOFTWARE.
  */
 /**
- * Package containing default capture implementations.
+ * All the code concerning the capture/replay functionality of the project.
+ * 
+ * @author sjdpeste
+ *
  */
-package com.stijndepestel.capturereplay.captures;
+package com.stijndepestel.geminio;
