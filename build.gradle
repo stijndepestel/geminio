@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group = 'com.stijndepestel'
-version = '0.5'
+version = '0.6-SNAPSHOT'
 
 description = "Capture/Replay testing framework. Aimed at (COTS) IoT devices, but useable in other situations as well."
 
