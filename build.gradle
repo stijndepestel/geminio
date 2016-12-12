@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group = 'com.stijndepestel'
-version = '0.5-SNAPSHOT'
+version = '0.5'
 
 description = "Capture/Replay testing framework. Aimed at (COTS) IoT devices, but useable in other situations as well."
 
@@ -27,8 +27,8 @@ configurations {
 
 dependencies {
     compile 'org.json:json:20160810'
-    compile 'org.slf4j:slf4j-api:1.7.12'
-    compile 'org.slf4j:slf4j-jdk14:1.7.12'
+    compile 'org.slf4j:slf4j-api:1.7.21'
+    compile 'org.slf4j:slf4j-jdk14:1.7.21'
     compile 'org.scream3r:jssc:2.8.0'
     testCompile 'junit:junit:4.12'
     testCompile 'com.jayway.awaitility:awaitility:1.6.3'
